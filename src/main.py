@@ -40,6 +40,8 @@ def startGame(graphAlgo:GraphAlgo, client):
     # game.plot_graph() # debug
     client.start()
     saved = getAgentsStart(graphAlgo)
+    # try:
+
     try:
         while client.is_running() == 'true':
             update(graphAlgo, client)
@@ -51,12 +53,12 @@ def startGame(graphAlgo:GraphAlgo, client):
                 if agent.dest == -1:
                     graphAlgo.PFL()
 
-                    if  agent.onduty:
+                    if agent.onduty:
                         next_node = agent.list.pop()
                         client.choose_next_edge(
                             '{"agent_id":' + str(agent.getID()) + ', "next_node_id":' + str(next_node) + '}')
                         ttl = client.time_to_end()
-                        # print(ttl, client.get_info())
+                        print(ttl, client.get_info())
 
 
                         if(len(agent.list) == 0):
@@ -67,9 +69,11 @@ def startGame(graphAlgo:GraphAlgo, client):
                         graphAlgo.GBA2()
                 # if(saved[index] == agent.getPos()):
             client.move()
+
                 # saved[index] = agent.getPos()
     except:
         print("Game over!")
+
 
 
 

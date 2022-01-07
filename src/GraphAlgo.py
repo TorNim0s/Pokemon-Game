@@ -144,8 +144,10 @@ class GraphAlgo():
         """
 
         for agent in self._graph.get_all_a().values():
-            if (agent.onduty):
+            if agent.onduty:
                 continue
+
+            print(f"agent:{agent} -> duty:{agent.onduty}")
 
             a_pos = agent.src
 
@@ -154,7 +156,7 @@ class GraphAlgo():
 
             for index, pokemon in  enumerate(self._graph.get_all_p().values()):
 
-                if not self.checkIfAvailable(pokemon):
+                if not self.checkIfAvailable(pokemon, agent):
                     continue
 
                 p_src, p_dst = pokemon.loc
@@ -214,9 +216,9 @@ class GraphAlgo():
             agent.pokemon.append(pokemon)
 
 
-    def checkIfAvailable(self, pokemon):
+    def checkIfAvailable(self, pokemon, a):
         for agent in self._graph.get_all_a().values():
-            if not agent.pokemon:
+            if not agent.pokemon or a == agent:
                 continue
             if agent.pokemon.loc == pokemon.loc:
                 print(f"Agent {agent._id}: -> {agent.pokemon}")
