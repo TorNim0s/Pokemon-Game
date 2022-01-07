@@ -86,8 +86,11 @@ class DiGraph():
 
         return True
 
+    def get_pokemon(self, pos):
+        return self._pokemons[pos]
+
     def del_pokemon(self, pokemon):
-        if(pokemon == None):
+        if(not pokemon):
             return
 
         self._pokemons.__delitem__(pokemon.getPos())

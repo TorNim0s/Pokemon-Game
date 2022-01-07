@@ -42,37 +42,37 @@ def startGame(graphAlgo:GraphAlgo, client):
     saved = getAgentsStart(graphAlgo)
     # try:
 
-    try:
-        while client.is_running() == 'true':
-            update(graphAlgo, client)
-            # game.update_graph(graphAlgo.get_graph())
-            game.draw()
-            # choose next edge
-            for index, agent in enumerate(graphAlgo.get_graph().get_all_a().values()):
+    # try:
+    while client.is_running() == 'true':
+        update(graphAlgo, client)
+        # game.update_graph(graphAlgo.get_graph())
+        # choose next edge
+        for index, agent in enumerate(graphAlgo.get_graph().get_all_a().values()):
 
-                if agent.dest == -1:
-                    graphAlgo.PFL()
+            if agent.dest == -1:
+                graphAlgo.PFL()
 
-                    if agent.onduty:
-                        next_node = agent.list.pop()
-                        client.choose_next_edge(
-                            '{"agent_id":' + str(agent.getID()) + ', "next_node_id":' + str(next_node) + '}')
-                        ttl = client.time_to_end()
-                        print(ttl, client.get_info())
+                if agent.onduty:
+                    next_node = agent.list.pop()
+                    client.choose_next_edge(
+                        '{"agent_id":' + str(agent.getID()) + ', "next_node_id":' + str(next_node) + '}')
+                    ttl = client.time_to_end()
+                    print(ttl, client.get_info())
 
 
-                        if(len(agent.list) == 0):
-                            agent.onduty = False
+                    if(len(agent.list) == 0):
+                        agent.onduty = False
 
-                    else:
-                        # graphAlgo.get_graph().del_pokemon(agent)
-                        graphAlgo.GBA2()
-                # if(saved[index] == agent.getPos()):
-            client.move()
+                else:
+                    # graphAlgo.get_graph().del_pokemon(agent)
+                    graphAlgo.GBA2()
+            # if(saved[index] == agent.getPos()):
+        client.move()
+        game.draw()
 
-                # saved[index] = agent.getPos()
-    except:
-        print("Game over!")
+            # saved[index] = agent.getPos()
+    # except:
+    #     print("Game over!")
 
 
 
@@ -81,12 +81,28 @@ def get_pokemons(graph, client):
     pokemons = json.loads(client.get_pokemons(),
                           object_hook=lambda d: SimpleNamespace(**d)).Pokemons
     pokemons = [p.Pokemon for p in pokemons]
-    for p in pokemons:
-        x, y, _ = p.pos.split(',')
+    # for p in pokemons:
+    #     x, y, _ = p.pos.split(',')
+
+    lst = []
 
     for id,p in enumerate(pokemons):
         x, y, _ = p.pos.split(',')
         p.pos = (float(x), float(y))
+        lst.append(p.pos)
+
+    delete = []
+
+    for pok in graph.get_all_p().keys():
+        if pok not in lst:
+            pokemon = graph.get_pokemon(pok)
+            print(f"DELETE -> {pokemon}")
+            delete.append(pokemon)
+
+    for pok in delete:
+        graph.del_pokemon(pok)
+
+    for id, p in enumerate(pokemons):
         graph.add_pokemon(id, p.pos, p.value, p.type)
 
 def update(algoGraph, client):
@@ -110,7 +126,7 @@ def update(algoGraph, client):
 
     algoGraph.PFL()
 
-    diGraph.clearPokemons()
+    # diGraph.clearPokemons()
     get_pokemons(diGraph, client)
     algoGraph.PFL()
 
