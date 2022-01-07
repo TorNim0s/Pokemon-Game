@@ -65,7 +65,7 @@ def startGame(graphAlgo:GraphAlgo, client):
 
                 else:
                     # graphAlgo.get_graph().del_pokemon(agent)
-                    graphAlgo.GBA2()
+                    graphAlgo.GBA3(agent)
             # if(saved[index] == agent.getPos()):
         client.move()
         game.draw()
@@ -96,7 +96,6 @@ def get_pokemons(graph, client):
     for pok in graph.get_all_p().keys():
         if pok not in lst:
             pokemon = graph.get_pokemon(pok)
-            print(f"DELETE -> {pokemon}")
             delete.append(pokemon)
 
     for pok in delete:

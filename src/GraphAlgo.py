@@ -174,46 +174,38 @@ class GraphAlgo():
             agent.onduty = True
             agent.pokemon = pokemon
 
-    def GBA3(self):
-        """
-        Get Best Agent to the pokemon
-        """
+    def GBA3(self, agent):
+        if agent.onduty:
+            return
 
-        for agent in self._graph.get_all_a().values():
-            if (agent.onduty):
+        a_pos = agent.src
+
+        best = {}
+        lst = {}
+        pokemon_save = {}
+
+        for index, pokemon in enumerate(self._graph.get_all_p().values()):
+            if pokemon.occupide:
                 continue
+            p_src, p_dst = pokemon.loc
 
-            agent.pokemon = []
+            lst2, time = self.TSP((a_pos, p_src, p_dst))
+            best[index] = time
+            lst[index] = lst2
+            pokemon_save[index] = pokemon
 
-            total_list = []
+        if not best:
+            return
 
-            for i in range(self._graph.p_size()/self._graph.a_size()):
-                a_pos = agent.src
+        lowesetTime = min(best.values())
+        res = list(filter(lambda x: best[x] == lowesetTime, best))
+        list_lowest = lst[res[0]]
 
-                best = {}
-                lst = {}
-
-                for index, pokemon in  enumerate(self._graph.get_all_p().values()):
-
-                    if not self.checkIfAvailable(pokemon):
-                        continue
-
-                    p_src, p_dst = pokemon.loc
-
-                    lst2, time = self.TSP((a_pos, p_src, p_dst))
-                    best[index] = time
-                    lst[index] = lst2
-
-                lowesetTime = min(best.values())
-                res = list(filter(lambda x: best[x] == lowesetTime, best))
-                list_lowest = lst[res[0]]
-                list_lowest.reverse()
-
-                total_list.append(list_lowest)
-
-            agent.list = list_lowest
-            agent.onduty = True
-            agent.pokemon.append(pokemon)
+        list_lowest.reverse()
+        agent.list = list_lowest
+        agent.onduty = True
+        agent.pokemon = pokemon_save[res[0]]
+        pokemon_save[res[0]].occupide = True
 
 
     def checkIfAvailable(self, pokemon, a):

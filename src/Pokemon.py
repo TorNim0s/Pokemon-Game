@@ -20,5 +20,8 @@ class Pokemon(Node):
                 "Raichu","Sandshrew","Sandslash")
         return random.choice(list)
 
+    def getBusy(self):
+        return self.occupide
+
     def __repr__(self):
         return "Pokemon" + super().__repr__() + f"value ={self.value}, type = {self.type}, loc={self.loc}"
