@@ -27,7 +27,7 @@ With a mission to "catch" as many pokemons as we can within a given time limit f
 [Link to main assignment](https://github.com/benmoshe/OOP_2021/tree/main/Assignments/Ex4)
 
 
-## he Algorithm <a name="algorithm"></a>
+## The Algorithm <a name="algorithm"></a>
 The algorithm goes a follows:
  - We send each agent to a "mission".
  - Each "mission" checks if there any pokemons that don't have any agent assigned to them.
