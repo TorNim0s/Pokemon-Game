@@ -134,7 +134,7 @@ class GraphAlgo():
             lst2, time = self.TSP((a_pos, p_src, p_dst))
 
             # lst2, time = self.TSP(a_pos, p_src, p_dst)
-            time *= pokemon.value
+            time /= pokemon.value
             best[index] = time
             lst[index] = lst2
             pokemon_save[index] = pokemon
