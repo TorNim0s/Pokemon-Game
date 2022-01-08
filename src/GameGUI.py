@@ -101,7 +101,7 @@ class GameGUI():
             x = self.my_scale(pokemon.getPos()[0], x=True)
             y = self.my_scale(pokemon.getPos()[1], y=True)
             pokImg = pygame.image.load(pokemon.path)
-            pokImg =  pygame.transform.scale(pokImg, (30, 30))
+            pokImg = pygame.transform.scale(pokImg, (30, 30))
             rect = pokImg.get_rect()
             rect = rect.move((x, y))
             self.screen.blit(pokImg, rect)
@@ -127,19 +127,19 @@ class GameGUI():
 
     def header_display(self):
         # draw the node id
-        # ttl = float(self.client.time_to_end())/1000
+        ttl = float(self.client.time_to_end())/1000
         info = json.loads(self.client.get_info(),
                           object_hook=lambda d: SimpleNamespace(**d)).GameServer
-        # headerTime = f"Time left: {(str(ttl))}"
+        headerTime = f"Time left: {(str(ttl))}"
         headerMoves = f"Moves: {info.moves}"
         headerGrade = f"Grade: {info.grade}"
 
-        # id_srf = self.font.render(headerTime, True, Color(255, 255, 255))
+        id_srf = self.font.render(headerTime, True, Color(255, 255, 255))
         id_srf2 = self.font.render(headerMoves, True, Color(255, 255, 255))
         id_srf3 = self.font.render(headerGrade, True, Color(255, 255, 255))
         x = self.screen.get_width() / 20
         y = self.screen.get_height() / 20
-        # self.screen.blit(id_srf, (x,y))
+        self.screen.blit(id_srf, (x,y))
         self.screen.blit(id_srf2, (x, y+25))
         self.screen.blit(id_srf3, (x, y+50))
 

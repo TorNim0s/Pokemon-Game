@@ -13,6 +13,7 @@ from pygame import gfxdraw
 import pygame
 from pygame import *
 import time
+import math
 
 def main():
     # default port
@@ -37,9 +38,14 @@ def getAgentsStart(graphAlgo) -> list:
 def startGame(graphAlgo:GraphAlgo, client):
     init_graph(graphAlgo.get_graph(), client)
     game = GameGUI(graphAlgo.get_graph(), client)
+    counter = 0
     # game.plot_graph() # debug
     client.start()
+    ttl_global = client.time_to_end()
+    total_send = ttl_global*10
     saved = getAgentsStart(graphAlgo)
+    prev = float(ttl_global)/1000
+    print(f"prev = {prev}")
     # try:
     # try:
     while client.is_running() == 'true':
@@ -57,7 +63,10 @@ def startGame(graphAlgo:GraphAlgo, client):
                         '{"agent_id":' + str(agent.getID()) + ', "next_node_id":' + str(next_node) + '}')
                     ttl = client.time_to_end()
                     # print(ttl, client.get_info())
-                    time = calc(agent, graphAlgo)
+                    if len(agent.list) == 0:
+                        time_to_pokemon = calc(agent, graphAlgo, next_node)
+                        t = threading.Thread(target=calc_Pokemon_To_Agent, args=[graphAlgo, agent, time_to_pokemon, next_node])
+                        t.start()
 
 
                     if(len(agent.list) == 0):
@@ -70,25 +79,51 @@ def startGame(graphAlgo:GraphAlgo, client):
                         graphAlgo.get_graph().del_pokemon(agent.pokemon)
                     graphAlgo.GBA3(agent)
             # if(saved[index] == agent.getPos()):
-        pygame.time.wait(100)
-        client.move()
+        ttl = client.time_to_end()
         game.draw()
-
-
+        if(prev - float(ttl)/1000 >= 0.1):
+            client.move()
+            prev = float(ttl)/1000
+        # pygame.time.wait(100)
 
             # saved[index] = agent.getPos()
     # except:
     #     print("Game over!")
 
-def calc(agent, graph:GraphAlgo):
-    if(len(agent.list) > 0):
-        src = agent.src
-        dst = agent.list[len(agent.list)-1]
-        weight, lst_nodes = graph.shortest_path(src,dst)
-        return weight/agent.speed
-    return 0
+def calc_Pokemon_To_Agent(graph:GraphAlgo, agent, time, dest):
+    src_pos = agent.getPos()
+    dst_pos = graph.get_graph().getNode(dest).getPos()
+    pok_pos = agent.pokemon.getPos()
+
+    dist_src_dst = math.sqrt(pow(src_pos[0] - dst_pos[0], 2) + pow(src_pos[1] - dst_pos[1], 2))
+    dist_src_pok = math.sqrt(pow(src_pos[0] - pok_pos[0], 2) + pow(src_pos[1] - pok_pos[1], 2))
+    while dist_src_pok < dist_src_dst:
+        src_pos = agent.getPos()
+        dst_pos = graph.get_graph().getNode(dest).getPos()
+        pok_pos = agent.pokemon.getPos()
+
+        dist_src_dst = math.sqrt(pow(src_pos[0] - dst_pos[0], 2) + pow(src_pos[1] - dst_pos[1], 2))
+        dist_src_pok = math.sqrt(pow(src_pos[0] - pok_pos[0], 2) + pow(src_pos[1] - pok_pos[1], 2))
+
+    agent.onduty = False
+    agent.src = dest
+    graph.GBA3(agent)
+
+def calc(agent, graph:GraphAlgo, node):
+    src = agent.src
+    dst = node
+    weight = graph.get_graph().getWeight(src, dst)
+    src_pos = graph.get_graph().getNode(src).getPos()
+    dst_pos = graph.get_graph().getNode(dst).getPos()
+    pok_pos = agent.pokemon.getPos()
+
+    dist_src_dst = math.sqrt(pow(src_pos[0] - dst_pos[0], 2) + pow(src_pos[1] - dst_pos[1], 2))
+    dist_src_pok = math.sqrt(pow(src_pos[0] - pok_pos[0], 2) + pow(src_pos[1] - pok_pos[1], 2))
+
+    return ((dist_src_pok/dist_src_dst) * weight)/agent.speed
 
 def get_pokemons(graph, client):
+
     pokemons = json.loads(client.get_pokemons(),
                           object_hook=lambda d: SimpleNamespace(**d)).Pokemons
     pokemons = [p.Pokemon for p in pokemons]
@@ -134,7 +169,7 @@ def update(algoGraph, client):
 
     diGraph.calc_bound()
 
-    algoGraph.PFL()
+    # algoGraph.PFL()
 
     # diGraph.clearPokemons()
     get_pokemons(diGraph, client)
