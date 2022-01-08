@@ -10,18 +10,17 @@ class Pokemon(Node):
         self.type = type
         self.loc = ()
         self.name = self.generateName()
+        self.path = self.getPath()
         self.occupide = False
 
+
     def generateName(self):
-        list = ("Bulbasaur", "Ivysaur", "Venusaur", "VenusaurMega", "Venusaur","Charmander",
-                "Charmeleon","Charizard", "Squirtle", "Wartortle","Blastoise","Caterpie",
-                "Metapod","Butterfree","Weedle","Kakuna","Beedrill","Pidgey","Pidgeotto",
-                "Pidgeot","Rattata","Raticate","Spearow","Fearow","Ekans","Arbok","Pikachu",
-                "Raichu","Sandshrew","Sandslash")
+        list = ("Pikachu", "Bulbasaur", "squirtle", "Charizard")
         return random.choice(list)
 
-    def getBusy(self):
-        return self.occupide
+    def getPath(self):
+        path = (f"..\\data\\{self.name}.png")
+        return path
 
     def __repr__(self):
         return "Pokemon" + super().__repr__() + f"value ={self.value}, type = {self.type}, loc={self.loc}"

@@ -189,7 +189,13 @@ class GraphAlgo():
                 continue
             p_src, p_dst = pokemon.loc
 
-            lst2, time = self.TSP((a_pos, p_src, p_dst))
+            time, lst2 = self.shortest_path(a_pos, p_src)
+            weight = self.get_graph().getWeight(p_src, p_dst)
+
+            time += weight
+            lst2.append(p_dst)
+
+            # lst2, time = self.TSP(a_pos, p_src, p_dst)
             best[index] = time
             lst[index] = lst2
             pokemon_save[index] = pokemon

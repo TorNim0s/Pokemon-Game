@@ -70,6 +70,8 @@ class GameGUI():
 
         radius = 15
         self.screen.fill(Color(0, 0, 0))
+        bg = pygame.image.load("..\\data\\background.png")
+        self.screen.blit(bg,(0, 0))
 
         for src, node in self._graph.get_all_v().items():
             x = self.my_scale(node.getPos()[0], x=True)
@@ -100,7 +102,17 @@ class GameGUI():
         for pokemon in self._graph.get_all_p().values():
             x = self.my_scale(pokemon.getPos()[0], x=True)
             y = self.my_scale(pokemon.getPos()[1], y=True)
-            pygame.draw.circle(self.screen, Color(0, 255, 255), (int(x),int(y)), 10)
+            pokImg = pygame.image.load(pokemon.path)
+            pokImg =  pygame.transform.scale(pokImg, (30, 30))
+            rect = pokImg.get_rect()
+            rect = rect.move((x, y))
+            self.screen.blit(pokImg, rect)
+
+            id_srf = self.font.render(pokemon.name, True, Color(255, 255, 255))
+            rect = id_srf.get_rect(center=(x+12, y-8))
+            self.screen.blit(id_srf, rect)
+
+            # pygame.draw.circle(self.screen, Color(0, 255, 255), (int(x),int(y)), 10)
 
         for agent in self._graph.get_all_a().values():
             x = self.my_scale(agent.getPos()[0], x=True)
@@ -117,19 +129,19 @@ class GameGUI():
 
     def header_display(self):
         # draw the node id
-        ttl = float(self.client.time_to_end())/1000
+        # ttl = float(self.client.time_to_end())/1000
         info = json.loads(self.client.get_info(),
                           object_hook=lambda d: SimpleNamespace(**d)).GameServer
-        headerTime = f"Time left: {(str(ttl))}"
+        # headerTime = f"Time left: {(str(ttl))}"
         headerMoves = f"Moves: {info.moves}"
         headerGrade = f"Grade: {info.grade}"
 
-        id_srf = self.font.render(headerTime, True, Color(255, 255, 255))
+        # id_srf = self.font.render(headerTime, True, Color(255, 255, 255))
         id_srf2 = self.font.render(headerMoves, True, Color(255, 255, 255))
         id_srf3 = self.font.render(headerGrade, True, Color(255, 255, 255))
         x = self.screen.get_width() / 20
         y = self.screen.get_height() / 20
-        self.screen.blit(id_srf, (x,y))
+        # self.screen.blit(id_srf, (x,y))
         self.screen.blit(id_srf2, (x, y+25))
         self.screen.blit(id_srf3, (x, y+50))
 

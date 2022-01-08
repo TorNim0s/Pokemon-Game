@@ -81,8 +81,6 @@ class DiGraph():
         if pos in self._pokemons.keys():
             return False
 
-        print("ADDED!")
-
         pokemon = Pokemon(id, pos, value, type)
         self._pokemons[pos] = pokemon
 

@@ -36,12 +36,11 @@ def getAgentsStart(graphAlgo) -> list:
 
 def startGame(graphAlgo:GraphAlgo, client):
     init_graph(graphAlgo.get_graph(), client)
-    game = GameGUI(graphAlgo.get_graph(), client)
+    # game = GameGUI(graphAlgo.get_graph(), client)
     # game.plot_graph() # debug
     client.start()
     saved = getAgentsStart(graphAlgo)
     # try:
-
     # try:
     while client.is_running() == 'true':
         update(graphAlgo, client)
@@ -50,14 +49,15 @@ def startGame(graphAlgo:GraphAlgo, client):
         for index, agent in enumerate(graphAlgo.get_graph().get_all_a().values()):
 
             if agent.dest == -1:
-                graphAlgo.PFL()
+                # graphAlgo.PFL()
 
                 if agent.onduty:
                     next_node = agent.list.pop()
                     client.choose_next_edge(
                         '{"agent_id":' + str(agent.getID()) + ', "next_node_id":' + str(next_node) + '}')
                     ttl = client.time_to_end()
-                    print(ttl, client.get_info())
+                    # print(ttl, client.get_info())
+                    time = calc(agent, graphAlgo)
 
 
                     if(len(agent.list) == 0):
@@ -70,15 +70,23 @@ def startGame(graphAlgo:GraphAlgo, client):
                         graphAlgo.get_graph().del_pokemon(agent.pokemon)
                     graphAlgo.GBA3(agent)
             # if(saved[index] == agent.getPos()):
+        pygame.time.wait(100)
         client.move()
-        game.draw()
+        # game.draw()
+
+
 
             # saved[index] = agent.getPos()
     # except:
     #     print("Game over!")
 
-
-
+def calc(agent, graph:GraphAlgo):
+    if(len(agent.list) > 0):
+        src = agent.src
+        dst = agent.list[len(agent.list)-1]
+        weight, lst_nodes = graph.shortest_path(src,dst)
+        return weight/agent.speed
+    return 0
 
 def get_pokemons(graph, client):
     pokemons = json.loads(client.get_pokemons(),
