@@ -23,7 +23,7 @@ class GameGUI():
         self.screen = display.set_mode((WIDTH, HEIGHT), depth=32, flags=RESIZABLE)
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont('Arial', 20, bold=True)
-        self.exit_button = Button((255, 0, 0), 0, 0, 50, 50, 'Stop')
+        self.exit_button = Button((255, 0, 0), 0, 0, 50, 75, 'Stop')
 
     def update_graph(self, graph):
         self._graph = graph
@@ -78,11 +78,13 @@ class GameGUI():
                     exit(0)
 
         self.screen.fill(Color(0, 0, 0))
-        self.exit_button.draw(self.screen)
+
         info = pygame.display.Info()
         bg = pygame.image.load("..\\imgs\\background.png")
         bg = pygame.transform.scale(bg, (info.current_w, info.current_h))
         self.screen.blit(bg, (0, 0))
+
+        self.exit_button.draw(self.screen)
 
         for src, node in self._graph.get_all_v().items():
             x = self.my_scale(node.getPos()[0], x=True)
@@ -138,6 +140,10 @@ class GameGUI():
             rect = id_srf2.get_rect(center=(x, y -35))
             self.screen.blit(id_srf2, rect)
 
+        copyright = self.font.render("Credits: Eldad.T, Ilan.S, Nir.M", True, Color(255, 255, 255))
+        rect = copyright.get_rect(center=(125, info.current_h-10))
+        self.screen.blit(copyright, rect)
+
         self.header_display()
 
         # update screen changes
@@ -160,9 +166,9 @@ class GameGUI():
         id_srf3 = self.font.render(headerGrade, True, Color(255, 255, 255))
         x = self.screen.get_width() / 20
         y = self.screen.get_height() / 20
-        self.screen.blit(id_srf, (x,y))
-        self.screen.blit(id_srf2, (x, y+25))
-        self.screen.blit(id_srf3, (x, y+50))
+        self.screen.blit(id_srf, (60,0))
+        self.screen.blit(id_srf2, (60, 25))
+        self.screen.blit(id_srf3, (60, 50))
 
 
     def scale(self, data, min_screen, max_screen, min_data, max_data):
