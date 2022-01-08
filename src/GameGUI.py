@@ -118,8 +118,6 @@ class GameGUI():
             rect = id_srf.get_rect(center=(x+12, y-8))
             self.screen.blit(id_srf, rect)
 
-            # pygame.draw.circle(self.screen, Color(0, 255, 255), (int(x),int(y)), 10)
-
         for agent in self._graph.get_all_a().values():
             x = self.my_scale(agent.getPos()[0], x=True)
             y = self.my_scale(agent.getPos()[1], y=True)

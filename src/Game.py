@@ -50,16 +50,10 @@ def startGame(graphAlgo:GraphAlgo, client):
             if agent.dest == -1:
 
                 if agent.onduty:
-                    # print(f"agent lst ={agent.list} --> pokemon = {agent.pokemon}")
                     next_node = agent.list.pop()
                     client.choose_next_edge(
                         '{"agent_id":' + str(agent.getID()) + ', "next_node_id":' + str(next_node) + '}')
                     ttl = client.time_to_end()
-                    # print(ttl, client.get_info())
-                    # if len(agent.list) == 0:
-                    #     time_to_pokemon = calc(agent, graphAlgo, next_node)
-                    #     t = threading.Thread(target=calc_Pokemon_To_Agent, args=[graphAlgo, agent, time_to_pokemon, next_node])
-                    #     t.start()
 
 
                     if(len(agent.list) == 0):
@@ -71,7 +65,7 @@ def startGame(graphAlgo:GraphAlgo, client):
                         graphAlgo.get_graph().del_pokemon(agent.pokemon)
                         get_pokemons(graphAlgo.get_graph(), client)
                         graphAlgo.PFL()
-                    graphAlgo.GBA4(agent)
+                    graphAlgo.GBA(agent)
         ttl = client.time_to_end()
         game.draw()
         if(prev - float(ttl) >= 100):
@@ -83,7 +77,7 @@ def calc_Pokemon_To_Agent(graph:GraphAlgo, agent, time, dest):
 
     agent.onduty = False
     agent.src = dest
-    graph.GBA4(agent)
+    graph.GBA(agent)
 
 def calc(agent, graph:GraphAlgo, node):
     src = agent.src
@@ -103,8 +97,6 @@ def get_pokemons(graph, client):
     pokemons = json.loads(client.get_pokemons(),
                           object_hook=lambda d: SimpleNamespace(**d)).Pokemons
     pokemons = [p.Pokemon for p in pokemons]
-    # for p in pokemons:
-    #     x, y, _ = p.pos.split(',')
 
     lst = []
 

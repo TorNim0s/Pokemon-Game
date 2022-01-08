@@ -14,11 +14,6 @@ class GraphAlgo():
     def __init__(self, graph = DiGraph()):
         self._graph = graph
 
-    def load_from_json(self, file_name: str) -> bool:
-        pass
-
-    def save_to_json(self, file_name: str) -> bool:
-        pass
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         prev, dist = self.DijkstraAlgo(id1)
@@ -89,27 +84,7 @@ class GraphAlgo():
 
         return salesman, totalWeight
 
-    def centerPoint(self) -> (int, float):
-        maxDis = sys.maxsize
-        nodeKey = 0
-        nodes = self._graph.get_all_v()
-        for node in nodes.values():
-            src = node.getID()
-            maxShortPath = 0
-            nodes2 = self._graph.get_all_v()
-            for dst in nodes2.values():
-                if(dst!=node):
-                    checkPath = self.shortest_path(src,dst.getID())
-                    dist = checkPath[0]
-                    if(dist > maxShortPath):
-                        maxShortPath = dist
-            if(maxShortPath< maxDis):
-                maxDis = maxShortPath
-                nodeKey = src
-
-        return (nodeKey, maxDis)
-
-    def GBA4(self, agent):
+    def GBA(self, agent):
         """
         Get Best Agent to the pokemon
         """
