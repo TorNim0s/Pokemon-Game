@@ -65,7 +65,8 @@ def startGame(graphAlgo:GraphAlgo, client):
 
                 else:
                     # graphAlgo.get_graph().del_pokemon(agent)
-                    if agent.pokemon and agent.pokemon.getPos() in graphAlgo.get_graph().get_all_p().keys():
+                    if agent.pokemon and agent.pokemon.getPos() in graphAlgo.get_graph().get_all_p().keys() and agent.pokemon.occupide:
+                        agent.pokemon.occupide = False
                         graphAlgo.get_graph().del_pokemon(agent.pokemon)
                     graphAlgo.GBA3(agent)
             # if(saved[index] == agent.getPos()):
