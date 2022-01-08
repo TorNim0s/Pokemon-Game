@@ -21,6 +21,7 @@ class GameGUI():
         self.screen = display.set_mode((WIDTH, HEIGHT), depth=32, flags=RESIZABLE)
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont('Arial', 20, bold=True)
+        self.exit_button = Button((255, 0, 0), 0, 0, 50, 50, 'Stop')
 
     def update_graph(self, graph):
         self._graph = graph
@@ -67,9 +68,16 @@ class GameGUI():
             if event.type == pygame.VIDEORESIZE:
                 surface = pygame.display.set_mode((event.w, event.h),
                                                   pygame.RESIZABLE)
+            if event.type == pygame.MOUSEBUTTONDOWN:  # If the 'Stop' button was pressed, "gently" stop the program
+                pos = pygame.mouse.get_pos()
+                if self.exit_button.is_over(pos):
+                    self.client.stop_connection()
+                    pygame.quit()
+                    exit(0)
 
         radius = 15
         self.screen.fill(Color(0, 0, 0))
+        self.exit_button.draw(self.screen)
 
         for src, node in self._graph.get_all_v().items():
             x = self.my_scale(node.getPos()[0], x=True)
@@ -156,3 +164,33 @@ class GameGUI():
             return self.scale(data, 50, self.screen.get_width() - 50, self._graph.bound["min_x"], self._graph.bound["max_x"])
         if y:
             return self.scale(data, 50, self.screen.get_height() - 50, self._graph.bound["min_y"], self._graph.bound["max_y"])
+
+class Button:
+    def __init__(self, color, x, y, width, height, text=''):
+        self.color = color
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = text
+
+    def draw(self, win, outline=None):
+        # Call this method to draw the button on the screen
+        if outline:
+            pygame.draw.rect(win, outline, (self.x - 2, self.y - 2, self.width + 4, self.height + 4), 0)
+
+        pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height), 0)
+
+        if self.text != '':
+            font = pygame.font.SysFont('comicsans', 20)
+            text = font.render(self.text, 1, (0, 0, 0))
+            win.blit(text, (
+                self.x + (self.width / 2 - text.get_width() / 2), self.y + (self.height / 2 - text.get_height() / 2)))
+
+    def is_over(self, pos):
+        # Pos is the mouse position or a tuple of (x,y) coordinates
+        if self.x < pos[0] < self.x + self.width:
+            if self.y < pos[1] < self.y + self.height:
+                return True
+
+        return False
