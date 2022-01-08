@@ -12,6 +12,7 @@ class Pokemon(Node):
         self.name = self.generateName()
         self.path = self.getPath()
         self.occupide = False
+        self.chosen = False
 
 
     def generateName(self):

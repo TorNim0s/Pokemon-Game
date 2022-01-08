@@ -163,11 +163,16 @@ def update(algoGraph, client):
 def getBestPosition(diGraph, client):
     val = 0
     place = 0
+    pokemon = None
     for pok in diGraph.get_all_p().values():
+        if pok.chosen:
+            continue
         if pok.value > val:
             val = pok.value
             print(pok.loc)
             place = pok.loc[0]
+            pokemon = pok
+    pokemon.chosen = True
     return place
 
 
@@ -200,9 +205,10 @@ def init_graph(algoGraph:GraphAlgo, client):
     get_pokemons(diGraph, client)
     algoGraph.PFL()
 
-    best = getBestPosition(diGraph, client)
+
 
     for i in range(agents):
+        best = getBestPosition(diGraph, client)
         client.add_agent("{\"id\":%d}" % (best))
 
     agents = json.loads(client.get_agents(),
