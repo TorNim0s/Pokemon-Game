@@ -1,3 +1,5 @@
+import random
+
 from src.Node import Node
 from src.Pokemon import Pokemon
 
@@ -12,6 +14,16 @@ class Agent(Node):
         self.list = []
         self.onduty = False
         self.pokemon = []
+        self.name = self.generateName()
+        self.path = self.getPath()
+
+    def generateName(self):
+        names = ("Ash", "Brock", "Dawn", "Helio")
+        return random.choice(names)
+
+    def getPath(self):
+        path = (f"..\\imgs\\{self.name}.png")
+        return path
 
     def __repr__(self):
         return "Agent" + super().__repr__() + f" value={self.value}, " \

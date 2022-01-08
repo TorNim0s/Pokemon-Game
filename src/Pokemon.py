@@ -16,7 +16,7 @@ class Pokemon(Node):
 
 
     def generateName(self):
-        list = ("Pikachu", "Bulbasaur", "squirtle", "Charizard")
+        list = ("Pikachu", "Bulbasaur", "Squirtle", "Charizard")
         return random.choice(list)
 
     def getPath(self):

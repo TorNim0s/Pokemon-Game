@@ -13,6 +13,8 @@ from src.DiGraph import DiGraph
 # init pygame
 WIDTH, HEIGHT = 1080, 720
 
+pokeball_path = "..\\imgs\\Pokeball.png"
+
 class GameGUI():
     def __init__(self, graph:DiGraph, client):
         pygame.init()
@@ -75,24 +77,22 @@ class GameGUI():
                     pygame.quit()
                     exit(0)
 
-        radius = 15
         self.screen.fill(Color(0, 0, 0))
         self.exit_button.draw(self.screen)
+        info = pygame.display.Info()
+        bg = pygame.image.load("..\\imgs\\background.png")
+        bg = pygame.transform.scale(bg, (info.current_w, info.current_h))
+        self.screen.blit(bg, (0, 0))
 
         for src, node in self._graph.get_all_v().items():
             x = self.my_scale(node.getPos()[0], x=True)
             y = self.my_scale(node.getPos()[1], y=True)
 
-            # its just to get a nice antialiased circle
-            gfxdraw.filled_circle(self.screen, int(x), int(y),
-                                  radius, Color(64, 80, 174))
-            gfxdraw.aacircle(self.screen, int(x), int(y),
-                             radius, Color(255, 255, 255))
-
-            # draw the node id
-            id_srf = self.font.render(str(node.getID()), True, Color(255, 255, 255))
-            rect = id_srf.get_rect(center=(x, y))
-            self.screen.blit(id_srf, rect)
+            agentImg = pygame.image.load(pokeball_path)
+            agentImg = pygame.transform.scale(agentImg, (30, 30))
+            rect = agentImg.get_rect()
+            rect = rect.move((x-15, y-15))
+            self.screen.blit(agentImg, rect)
 
             for dst, weight in self._graph.all_in_edges_of_node(src).items():
                 dstNode = self._graph.getNode(dst)
@@ -111,17 +111,32 @@ class GameGUI():
             pokImg = pygame.image.load(pokemon.path)
             pokImg = pygame.transform.scale(pokImg, (30, 30))
             rect = pokImg.get_rect()
-            rect = rect.move((x, y))
+            rect = rect.move((x-15, y-15))
             self.screen.blit(pokImg, rect)
 
             id_srf = self.font.render(pokemon.name, True, Color(255, 255, 255))
-            rect = id_srf.get_rect(center=(x+12, y-8))
+            rect = id_srf.get_rect(center=(x+15, y-20))
             self.screen.blit(id_srf, rect)
 
         for agent in self._graph.get_all_a().values():
             x = self.my_scale(agent.getPos()[0], x=True)
             y = self.my_scale(agent.getPos()[1], y=True)
-            pygame.draw.circle(self.screen, Color(122, 61, 23),(int(x), int(y)), 10)
+
+            agentImg = pygame.image.load(agent.path)
+            agentImg = pygame.transform.scale(agentImg, (50, 50))
+            rect = agentImg.get_rect()
+            rect = rect.move((x-25, y-25))
+            self.screen.blit(agentImg, rect)
+
+            name_header = f"Name: {agent.name}"
+            speed_header = f"Speed: {agent.speed}"
+
+            id_srf = self.font.render(name_header, True, Color(255, 255, 255))
+            rect = id_srf.get_rect(center=(x, y-55))
+            self.screen.blit(id_srf, rect)
+            id_srf2 = self.font.render(speed_header, True, Color(255, 255, 255))
+            rect = id_srf2.get_rect(center=(x, y -35))
+            self.screen.blit(id_srf2, rect)
 
         self.header_display()
 
