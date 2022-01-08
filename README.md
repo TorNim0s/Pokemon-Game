@@ -43,7 +43,7 @@ The algorithm goes a follows:
 ## GUI Example <a name="gui"></a>
 Example from case 11:
 
-![](https://i.imgur.com/z852spU.png)
+![](https://i.imgur.com/IZG769q.png)
 
 - The brown dots represent the agents.
 - The pokemons represent the various types of pokemons.
@@ -74,7 +74,7 @@ Results for the cases we got
 |8|273|173|1|
 |9|544|479|1|
 |10|270|125|1|
-|11|559|1662|3|
+|11|555|1648|3|
 |12|274|40|1|
 |13|542|292|2|
 |14|270|208|3|
@@ -88,4 +88,6 @@ We are using Matplotlib version `3.5.1` in order to debug the graph.
 The GUI uses Pygame version `2.1.2`.
 
 ## UML <a name="uml"></a>
-![]()
+![](https://i.imgur.com/J5GiUSy.png)
+
+[Link to main assignment](https://github.com/benmoshe/OOP_2021/tree/main/Assignments/Ex4)
