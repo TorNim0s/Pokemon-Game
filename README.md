@@ -24,7 +24,10 @@ It is based on our Directed Weighted Graph Tasks we did before on the course. So
 Here we recieve a DW Graph, number of agents and pokemons.
 With a mission to "catch" as many pokemons as we can within a given time limit for each stage.
 
-# The Algorithm <a name="algorithm"></a>
+[Link to main assignment](https://github.com/benmoshe/OOP_2021/tree/main/Assignments/Ex4)
+
+
+## he Algorithm <a name="algorithm"></a>
 The algorithm goes a follows:
  - We send each agent to a "mission".
  - Each "mission" checks if there any pokemons that don't have any agent assigned to them.
@@ -37,7 +40,16 @@ The algorithm goes a follows:
 
 
 ## Code Description <a name="code"></a>
-
+- `Node.py` : Implements and represents the vertices of the graph.
+- `Edge.py`: Implements and represents the edges of the graph.
+- `Pokemon.py` : Implements the pokemons that show up on the graph.
+- `Agent.py` : Implements the agents that try to catch the pokemons.
+- `DiGraph.py`: Implements the graph itself, contains lists of all vertices, agents and pokemons.
+- `GraphAlgo.py`: Implements the algorithm that is listed above.
+  - `TSP`, `DijakstraAlgo`, `ShortestPath`, `GBA` - get best agent, `FPL` - find pokemon location.
+- `Client.py` : Given to us with the assignment, contains function to move the agents and make/close connection with the server.
+- `GameGUI.py` : Creates the GUI for the game.
+- `Game.py` : The main class for this project, initializes the graph, starts the game, controls the agents.
 
 
 ## GUI Example <a name="gui"></a>
@@ -45,12 +57,13 @@ Example from case 11:
 
 ![](https://i.imgur.com/IZG769q.png)
 
-- The brown dots represent the agents.
+- The agents represent the agents with random names.
 - The pokemons represent the various types of pokemons.
 - In the top left corner we have:
    - The remaning time for the game.
    - The amount of moves we made.
    - Our grade for the game which is based on the number of pokemons we caught.
+   - A stop button, to stop the game gracefully.
 
 ## How to Run <a name="run"></a>
 Firstly, to run this project, download the files from the github.
@@ -89,5 +102,3 @@ The GUI uses Pygame version `2.1.2`.
 
 ## UML <a name="uml"></a>
 ![](https://i.imgur.com/J5GiUSy.png)
-
-[Link to main assignment](https://github.com/benmoshe/OOP_2021/tree/main/Assignments/Ex4)
