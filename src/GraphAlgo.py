@@ -178,6 +178,12 @@ class GraphAlgo():
         if agent.onduty:
             return
 
+        print("------------------------------")
+        for pokemon in self._graph.get_all_p().values():
+            print(pokemon)
+        print("------------------------------")
+
+
         a_pos = agent.src
 
         best = {}
@@ -187,6 +193,7 @@ class GraphAlgo():
         for index, pokemon in enumerate(self._graph.get_all_p().values()):
             if pokemon.occupide:
                 continue
+
             p_src, p_dst = pokemon.loc
 
             time, lst2 = self.shortest_path(a_pos, p_src)
@@ -196,6 +203,52 @@ class GraphAlgo():
             lst2.append(p_dst)
 
             # lst2, time = self.TSP(a_pos, p_src, p_dst)
+            best[index] = time
+            lst[index] = lst2
+            pokemon_save[index] = pokemon
+
+        if not best:
+            return
+
+        lowesetTime = min(best.values())
+        res = list(filter(lambda x: best[x] == lowesetTime, best))
+        list_lowest = lst[res[0]]
+
+        list_lowest.reverse()
+        agent.list = list_lowest
+        agent.onduty = True
+        agent.pokemon = pokemon_save[res[0]]
+        pokemon_save[res[0]].occupide = True
+
+    def GBA4(self, agent):
+        if agent.onduty:
+            return
+
+        print("--------------START----------------")
+        for pokemon in self._graph.get_all_p().values():
+            print(pokemon)
+        print("---------------END---------------")
+
+        a_pos = agent.src
+
+        best = {}
+        lst = {}
+        pokemon_save = {}
+        # shortest path-> weight / speed
+        for index, pokemon in enumerate(self._graph.get_all_p().values()):
+            if pokemon.occupide:
+                continue
+            p_src, p_dst = pokemon.loc
+
+            time = 0
+            lst2 = []
+
+            print(f"a pos ={a_pos} --- pokemon = {pokemon.loc}")
+
+            lst2, time = self.TSP((a_pos, p_src, p_dst))
+
+            # lst2, time = self.TSP(a_pos, p_src, p_dst)
+            time *= pokemon.value
             best[index] = time
             lst[index] = lst2
             pokemon_save[index] = pokemon
