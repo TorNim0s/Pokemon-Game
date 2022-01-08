@@ -25,15 +25,32 @@ Here we recieve a DW Graph, number of agents and pokemons.
 With a mission to "catch" as many pokemons as we can within a given time limit for each stage.
 
 # The Algorithm <a name="algorithm"></a>
-
+The algorithm goes a follows:
+ - We send each agent to a "mission".
+ - Each "mission" checks if there any pokemons that don't have any agent assigned to them.
+ - Based on the pokemons that are not chosen already by another agent, we choose the best pokemon we can catch.
+   - How we choose who's the best pokemon to catch, for each pokemon:
+   - We calculate the shortest path to the pokemon using the TSP algorithm from the last task.
+   - Calculating the time it takes the agent to reach the pokemon by diving the distance with his speed.
+   - Then we divide the the time with the value of the pokemon.
+   - And lastly we choose the the pokemon with the lowest "weight" and send the agent towards that pokemon.
 
 
 ## Code Description <a name="code"></a>
 
 
 
-## GUI <a name="gui"></a>
+## GUI Example <a name="gui"></a>
+Example from case 11:
 
+![](https://i.imgur.com/z852spU.png)
+
+- The brown dots represent the agents.
+- The pokemons represent the various types of pokemons.
+- In the top left corner we have:
+   - The remaning time for the game.
+   - The amount of moves we made.
+   - Our grade for the game which is based on the number of pokemons we caught.
 
 ## How to Run <a name="run"></a>
 Firstly, to run this project, download the files from the github.
@@ -57,7 +74,7 @@ Results for the cases we got
 |8|273|173|1|
 |9|544|479|1|
 |10|270|125|1|
-|11|555|1648|3|
+|11|559|1662|3|
 |12|274|40|1|
 |13|542|292|2|
 |14|270|208|3|
