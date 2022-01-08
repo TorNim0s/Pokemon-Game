@@ -46,64 +46,44 @@ def startGame(graphAlgo:GraphAlgo, client):
     saved = getAgentsStart(graphAlgo)
     prev = float(ttl_global)/1000
     print(f"prev = {prev}")
-    # try:
-    # try:
-    while client.is_running() == 'true':
-        update(graphAlgo, client)
-        # game.update_graph(graphAlgo.get_graph())
-        # choose next edge
-        for index, agent in enumerate(graphAlgo.get_graph().get_all_a().values()):
+    try:
+        while client.is_running() == 'true':
+            update(graphAlgo, client)
+            for index, agent in enumerate(graphAlgo.get_graph().get_all_a().values()):
 
-            if agent.dest == -1:
-                # graphAlgo.PFL()
+                if agent.dest == -1:
 
-                if agent.onduty:
-                    next_node = agent.list.pop()
-                    client.choose_next_edge(
-                        '{"agent_id":' + str(agent.getID()) + ', "next_node_id":' + str(next_node) + '}')
-                    ttl = client.time_to_end()
-                    # print(ttl, client.get_info())
-                    if len(agent.list) == 0:
-                        time_to_pokemon = calc(agent, graphAlgo, next_node)
-                        t = threading.Thread(target=calc_Pokemon_To_Agent, args=[graphAlgo, agent, time_to_pokemon, next_node])
-                        t.start()
+                    if agent.onduty:
+                        next_node = agent.list.pop()
+                        client.choose_next_edge(
+                            '{"agent_id":' + str(agent.getID()) + ', "next_node_id":' + str(next_node) + '}')
+                        ttl = client.time_to_end()
+                        # print(ttl, client.get_info())
+                        if len(agent.list) == 0:
+                            time_to_pokemon = calc(agent, graphAlgo, next_node)
+                            t = threading.Thread(target=calc_Pokemon_To_Agent, args=[graphAlgo, agent, time_to_pokemon, next_node])
+                            t.start()
 
 
-                    if(len(agent.list) == 0):
-                        agent.onduty = False
+                        if(len(agent.list) == 0):
+                            agent.onduty = False
 
-                else:
-                    # graphAlgo.get_graph().del_pokemon(agent)
-                    if agent.pokemon and agent.pokemon.getPos() in graphAlgo.get_graph().get_all_p().keys() and agent.pokemon.occupide:
-                        agent.pokemon.occupide = False
-                        graphAlgo.get_graph().del_pokemon(agent.pokemon)
-                    graphAlgo.GBA3(agent)
-            # if(saved[index] == agent.getPos()):
-        ttl = client.time_to_end()
-        game.draw()
-        if(prev - float(ttl)/1000 >= 0.1):
-            client.move()
-            prev = float(ttl)/1000
-        # pygame.time.wait(100)
-
-            # saved[index] = agent.getPos()
-    # except:
-    #     print("Game over!")
+                    else:
+                        if agent.pokemon and agent.pokemon.getPos() in graphAlgo.get_graph().get_all_p().keys() and agent.pokemon.occupide:
+                            agent.pokemon.occupide = False
+                            graphAlgo.get_graph().del_pokemon(agent.pokemon)
+                        graphAlgo.GBA3(agent)
+            ttl = client.time_to_end()
+            game.draw()
+            if(prev - float(ttl)/1000 >= 0.1):
+                client.move()
+                prev = float(ttl)/1000
+    except:
+        print("GameOver!")
+    print("GameOver!")
 
 def calc_Pokemon_To_Agent(graph:GraphAlgo, agent, time, dest):
-    src_pos = agent.getPos()
-    dst_pos = graph.get_graph().getNode(dest).getPos()
-    pok_pos = agent.pokemon.getPos()
-
-    dist_src_dst = math.sqrt(pow(src_pos[0] - dst_pos[0], 2) + pow(src_pos[1] - dst_pos[1], 2))
-    dist_src_pok = math.sqrt(pow(src_pos[0] - pok_pos[0], 2) + pow(src_pos[1] - pok_pos[1], 2))
-    while dist_src_pok < dist_src_dst:
-        src_pos = agent.getPos()
-        dst_pos = graph.get_graph().getNode(dest).getPos()
-        pok_pos = agent.pokemon.getPos()
-
-        dist_src_dst = math.sqrt(pow(src_pos[0] - dst_pos[0], 2) + pow(src_pos[1] - dst_pos[1], 2))
-        dist_src_pok = math.sqrt(pow(src_pos[0] - pok_pos[0], 2) + pow(src_pos[1] - pok_pos[1], 2))
+    pygame.time.wait(math.ceil(time))
 
     agent.onduty = False
     agent.src = dest
