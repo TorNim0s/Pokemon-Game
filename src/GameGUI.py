@@ -70,8 +70,6 @@ class GameGUI():
 
         radius = 15
         self.screen.fill(Color(0, 0, 0))
-        bg = pygame.image.load("..\\data\\background.png")
-        self.screen.blit(bg,(0, 0))
 
         for src, node in self._graph.get_all_v().items():
             x = self.my_scale(node.getPos()[0], x=True)

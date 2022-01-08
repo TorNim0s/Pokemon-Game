@@ -36,7 +36,7 @@ def getAgentsStart(graphAlgo) -> list:
 
 def startGame(graphAlgo:GraphAlgo, client):
     init_graph(graphAlgo.get_graph(), client)
-    # game = GameGUI(graphAlgo.get_graph(), client)
+    game = GameGUI(graphAlgo.get_graph(), client)
     # game.plot_graph() # debug
     client.start()
     saved = getAgentsStart(graphAlgo)
@@ -72,7 +72,7 @@ def startGame(graphAlgo:GraphAlgo, client):
             # if(saved[index] == agent.getPos()):
         pygame.time.wait(100)
         client.move()
-        # game.draw()
+        game.draw()
 
 
 
