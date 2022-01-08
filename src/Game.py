@@ -43,50 +43,47 @@ def startGame(graphAlgo:GraphAlgo, client):
     client.start()
     ttl_global = client.time_to_end()
     prev = float(ttl_global)
-    print(f"prev = {prev}")
-    # try:
-    while client.is_running() == 'true':
-        update(graphAlgo, client)
-        for index, agent in enumerate(graphAlgo.get_graph().get_all_a().values()):
+    try:
+        while client.is_running() == 'true':
+            update(graphAlgo, client)
+            for index, agent in enumerate(graphAlgo.get_graph().get_all_a().values()):
 
-            if agent.dest == -1:
+                if agent.dest == -1:
 
-                if agent.onduty:
-                    # print(f"agent lst ={agent.list} --> pokemon = {agent.pokemon}")
-                    next_node = agent.list.pop()
-                    client.choose_next_edge(
-                        '{"agent_id":' + str(agent.getID()) + ', "next_node_id":' + str(next_node) + '}')
-                    ttl = client.time_to_end()
-                    # print(ttl, client.get_info())
-                    # if len(agent.list) == 0:
-                    #     time_to_pokemon = calc(agent, graphAlgo, next_node)
-                    #     t = threading.Thread(target=calc_Pokemon_To_Agent, args=[graphAlgo, agent, time_to_pokemon, next_node])
-                    #     t.start()
+                    if agent.onduty:
+                        # print(f"agent lst ={agent.list} --> pokemon = {agent.pokemon}")
+                        next_node = agent.list.pop()
+                        client.choose_next_edge(
+                            '{"agent_id":' + str(agent.getID()) + ', "next_node_id":' + str(next_node) + '}')
+                        ttl = client.time_to_end()
+                        # print(ttl, client.get_info())
+                        # if len(agent.list) == 0:
+                        #     time_to_pokemon = calc(agent, graphAlgo, next_node)
+                        #     t = threading.Thread(target=calc_Pokemon_To_Agent, args=[graphAlgo, agent, time_to_pokemon, next_node])
+                        #     t.start()
 
 
-                    if(len(agent.list) == 0):
-                        agent.onduty = False
+                        if(len(agent.list) == 0):
+                            agent.onduty = False
 
-                else:
-                    if agent.pokemon and agent.pokemon.getPos() in graphAlgo.get_graph().get_all_p().keys() and agent.pokemon.occupide:
-                        agent.pokemon.occupide = False
-                        graphAlgo.get_graph().del_pokemon(agent.pokemon)
-                        get_pokemons(graphAlgo.get_graph(), client)
-                        graphAlgo.PFL()
-                    graphAlgo.GBA4(agent)
-        ttl = client.time_to_end()
-        game.draw()
-        if(prev - float(ttl) >= 100):
-            client.move()
-            prev = float(ttl)
-    # except:
-    #     print("GameOver!")
+                    else:
+                        if agent.pokemon and agent.pokemon.getPos() in graphAlgo.get_graph().get_all_p().keys() and agent.pokemon.occupide:
+                            agent.pokemon.occupide = False
+                            graphAlgo.get_graph().del_pokemon(agent.pokemon)
+                            get_pokemons(graphAlgo.get_graph(), client)
+                            graphAlgo.PFL()
+                        graphAlgo.GBA4(agent)
+            ttl = client.time_to_end()
+            game.draw()
+            if(prev - float(ttl) >= 100):
+                client.move()
+                prev = float(ttl)
+    except:
+        print("GameOver!")
     print("GameOver!")
 
 def calc_Pokemon_To_Agent(graph:GraphAlgo, agent, time, dest):
     pygame.time.wait(math.ceil(time))
-
-    print(f"agent -> {agent}, list = ->{agent.list}, dest = {dest}")
 
     agent.onduty = False
     agent.src = dest
@@ -126,7 +123,6 @@ def get_pokemons(graph, client):
     for pok in graph.get_all_p().keys():
         if pok not in lst:
             pokemon = graph.get_pokemon(pok)
-            print(f"deleted -> {pokemon}")
             delete.append(pokemon)
 
     for pok in delete:
@@ -153,10 +149,6 @@ def update(algoGraph, client):
         (diGraph._agents[agent.id]).speed = agent.speed
 
     diGraph.calc_bound()
-
-    # algoGraph.PFL()
-
-    # diGraph.clearPokemons()
     get_pokemons(diGraph, client)
     algoGraph.PFL()
 

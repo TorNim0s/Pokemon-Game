@@ -109,125 +109,13 @@ class GraphAlgo():
 
         return (nodeKey, maxDis)
 
-    def GBA(self):
-        """
-        Get Best Agent to the pokemon
-        """
-
-        for pokemon in self._graph.get_all_p().values():
-
-            p_src, p_dst = pokemon.loc
-
-            best = {}
-            lst = {}
-            for index, agent in enumerate(self._graph.get_all_a().values()):
-                if(agent.onduty):
-                    continue
-                a_pos = agent.src
-                lst2, time = self.TSP((a_pos,p_src,p_dst))
-                best[index] = time
-                lst[index] = lst2
-
-                lowesetTime = min(best.values())
-                res = list(filter(lambda x: best[x] == lowesetTime, best))
-                list_lowest = lst[res[0]]
-
-                if(len(list_lowest) > 0):
-                    list_lowest.reverse()
-                    agent.list = list_lowest
-                    agent.onduty = True
-                    agent.pokemon = pokemon
-
-    def GBA2(self):
-        """
-        Get Best Agent to the pokemon
-        """
-
-        for agent in self._graph.get_all_a().values():
-            if agent.onduty:
-                continue
-
-            print(f"agent:{agent} -> duty:{agent.onduty}")
-
-            a_pos = agent.src
-
-            best = {}
-            lst = {}
-
-            for index, pokemon in  enumerate(self._graph.get_all_p().values()):
-
-                if not self.checkIfAvailable(pokemon, agent):
-                    continue
-
-                p_src, p_dst = pokemon.loc
-
-                lst2, time = self.TSP((a_pos, p_src, p_dst))
-                best[index] = time
-                lst[index] = lst2
-
-            lowesetTime = min(best.values())
-            res = list(filter(lambda x: best[x] == lowesetTime, best))
-            list_lowest = lst[res[0]]
-
-            list_lowest.reverse()
-            agent.list = list_lowest
-            agent.onduty = True
-            agent.pokemon = pokemon
-
-    def GBA3(self, agent):
-        if agent.onduty:
-            return
-
-        print("------------------------------")
-        for pokemon in self._graph.get_all_p().values():
-            print(pokemon)
-        print("------------------------------")
-
-
-        a_pos = agent.src
-
-        best = {}
-        lst = {}
-        pokemon_save = {}
-
-        for index, pokemon in enumerate(self._graph.get_all_p().values()):
-            if pokemon.occupide:
-                continue
-
-            p_src, p_dst = pokemon.loc
-
-            time, lst2 = self.shortest_path(a_pos, p_src)
-            weight = self.get_graph().getWeight(p_src, p_dst)
-
-            time += weight
-            lst2.append(p_dst)
-
-            # lst2, time = self.TSP(a_pos, p_src, p_dst)
-            best[index] = time
-            lst[index] = lst2
-            pokemon_save[index] = pokemon
-
-        if not best:
-            return
-
-        lowesetTime = min(best.values())
-        res = list(filter(lambda x: best[x] == lowesetTime, best))
-        list_lowest = lst[res[0]]
-
-        list_lowest.reverse()
-        agent.list = list_lowest
-        agent.onduty = True
-        agent.pokemon = pokemon_save[res[0]]
-        pokemon_save[res[0]].occupide = True
-
     def GBA4(self, agent):
+        """
+        Get Best Agent to the pokemon
+        """
+
         if agent.onduty:
             return
-
-        print("--------------START----------------")
-        for pokemon in self._graph.get_all_p().values():
-            print(pokemon)
-        print("---------------END---------------")
 
         a_pos = agent.src
 
@@ -242,8 +130,6 @@ class GraphAlgo():
 
             time = 0
             lst2 = []
-
-            print(f"a pos ={a_pos} --- pokemon = {pokemon.loc}")
 
             lst2, time = self.TSP((a_pos, p_src, p_dst))
 
@@ -272,7 +158,6 @@ class GraphAlgo():
             if not agent.pokemon or a == agent:
                 continue
             if agent.pokemon.loc == pokemon.loc:
-                print(f"Agent {agent._id}: -> {agent.pokemon}")
                 return False
 
         return True

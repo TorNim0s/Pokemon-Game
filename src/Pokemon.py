@@ -20,7 +20,7 @@ class Pokemon(Node):
         return random.choice(list)
 
     def getPath(self):
-        path = (f"..\\data\\{self.name}.png")
+        path = (f"..\\imgs\\{self.name}.png")
         return path
 
     def __repr__(self):
