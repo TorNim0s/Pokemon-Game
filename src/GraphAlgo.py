@@ -28,6 +28,7 @@ class GraphAlgo():
 
         path.append(id2)
 
+        print((dist[id2], path))
         return((dist[id2], path))
 
     def DijkstraAlgo(self, src):
@@ -56,6 +57,7 @@ class GraphAlgo():
 
             visit.remove(visit[lowerIndex])
 
+        print(prev,dist)
         return prev,dist
 
 
@@ -128,14 +130,7 @@ class GraphAlgo():
         pokemon_save[res[0]].occupide = True
 
 
-    def checkIfAvailable(self, pokemon, a):
-        for agent in self._graph.get_all_a().values():
-            if not agent.pokemon or a == agent:
-                continue
-            if agent.pokemon.loc == pokemon.loc:
-                return False
 
-        return True
 
     def isOnEdge(self, src: Node, dst: Node, pos, type):
         srcPos = src.getPos()
