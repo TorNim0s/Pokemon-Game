@@ -18,6 +18,7 @@
 This is task 4 in our OOP course.
 
 It is based on our Directed Weighted Graph Tasks we did before on the course. So we used our implementation from the tasks before.
+
 [Ex2 - Directed Weighted Graph - Java](https://github.com/TorNim0s/Directed-Weighted-Grapth) , 
 [Ex3 - Directed Weighted Graph - Python](https://github.com/TorNim0s/Directed-Weighted-Graph-Python)
 
@@ -53,9 +54,11 @@ The algorithm goes a follows:
 
 
 ## GUI Example <a name="gui"></a>
-Example from case 11:
+[Full run case 11](https://www.youtube.com/watch?v=FQn5bDPchAg)
 
-![](https://i.imgur.com/IZG769q.png)
+Running clip of case 11:
+
+![](https://i.imgur.com/5ikI0pm.gif)
 
 - The agents represent the agents with random names.
 - The pokemons represent the various types of pokemons.
