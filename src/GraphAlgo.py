@@ -28,7 +28,6 @@ class GraphAlgo():
 
         path.append(id2)
 
-        print((dist[id2], path))
         return((dist[id2], path))
 
     def DijkstraAlgo(self, src):
@@ -57,7 +56,6 @@ class GraphAlgo():
 
             visit.remove(visit[lowerIndex])
 
-        print(prev,dist)
         return prev,dist
 
 
